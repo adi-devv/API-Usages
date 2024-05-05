@@ -5,9 +5,9 @@ from twilio.rest import Client
 from twilio.http.http_client import TwilioHttpClient
 
 f_url = "https://api.openweathermap.org/data/2.5/forecast"
-key = "get the key"
-acc_sid = "get the twilio sid"
-auth_token = "get the twilio auth token"
+key = "key"
+acc_sid = os.environ.get("accsid")
+auth_token = os.environ.get("autht")
 
 weather_params = {
     "lat": 25.572491,
@@ -35,8 +35,8 @@ if will_rain:
     msg = client.messages \
         .create(
             body="Gonna rain!",
-            from_="+18144632691",
-            to="+number"
+            from_="+sendernum",
+            to="+num"
         )
 
 print(msg.status)
