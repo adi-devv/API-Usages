@@ -21,6 +21,22 @@ stk_params = {
     "apikey": api_key,
 
 }
+
+resp = requests.get(endpoint, params=stk_params)
+data = resp.json()["Time Series (Daily)"]
+dataL = [v for (i, v) in data.items()]
+
+closingP = [v["4. close"] for v in dataL]
+
+diff = float(closingP[0])-float(closingP[1])
+emoji = None
+if diff>=0:
+    emoji = "🔺"
+else:
+    emoji = "🔻"
+
+perc = round((diff)*100/float(closingP[1]))
+
 print(str(perc)+"%")
 
 if abs(perc)>=.5:
