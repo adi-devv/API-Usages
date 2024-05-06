@@ -38,23 +38,3 @@ else:
 perc = round((diff)*100/float(closingP[1]))
 
 print(str(perc)+"%")
-
-if abs(perc)>=.5:
-    news_params = {
-        "apiKey": "x",
-        "qinTitle": company,
-    }
-
-    resp2 = requests.get(news_ep, params=news_params)
-    articles = resp2.json()["articles"][:1]
-
-    msgs = [f"{stock}:{emoji}{perc}%\nHeadline:{v['title']}\nBrief:{v['description']}" for v in articles]
-    client = Client(twilio_sid, twilio_token)
-
-    for msg in msgs:
-        msg = client.messages \
-            .create(
-                body=msg,
-                from_="+x",
-                to="+x"
-            )
