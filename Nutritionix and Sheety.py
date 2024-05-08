@@ -22,23 +22,3 @@ ex_params = {
 
 resp = requests.post(exercise_ep, json=ex_params, headers=headers)
 result = resp.json()
-
-date = datetime.today().strftime("%d/%m/%Y")
-now = datetime.now().strftime("%X")
-
-h2 = {
-    "Authorization": "Bearer z"
-}
-for ex in result["exercises"]:
-    sheet_inputs = {
-        "workout": {
-            "date": date,
-            "time": now,
-            "exercise": ex['name'].title(),
-            "duration": ex['duration_min'],
-            "calories": ex['nf_calories']
-        }
-    }
-
-    sheet_resp = requests.post(sheet_ep, json=sheet_inputs, headers=h2)
-    print(sheet_resp.text)
