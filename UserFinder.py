@@ -1,6 +1,6 @@
 import requests
 
-user_id = 25181517
+user_id = #######
 url = f"https://api.github.com/user/{user_id}"
 
 response = requests.get(url, headers={"Accept": "application/vnd.github.v3+json"})
