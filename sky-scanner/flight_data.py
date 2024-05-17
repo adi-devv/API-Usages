@@ -41,3 +41,12 @@ class FlightData:
                     "cabin_class": "business",
                  }
         }
+
+        response = requests.post(url, headers=self.headers, json=payload)
+        if response.status_code == 201:
+            print("Offer request created successfully")
+            print(response.json())
+        else:
+            print(f"Failed to create offer request: {response.status_code}\n{response.text}")
+        print(response.json()['data']['offers'][0])
+        return response.json()['data']['offers'][0]['total_amount']
