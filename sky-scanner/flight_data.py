@@ -1,23 +1,52 @@
 import json
 import requests
 
-headers = {"Authorization": f"Bearer x", "Duffel-Version": "v1"}
-airports = {}
-url = "https://api.duffel.com/air/airports?limit=200"
 
-while url:
-    response = requests.get(url, headers=headers)
-    data = response.json()
-    print(data['data'])
-    airports.update({i['city_name']: i['iata_city_code'] for i in response.json()['data']})
-    url = data['meta'].get('after') and f"{url}&after={data['meta']['after']}"
+class FlightData:
+    def __init__(self, token):
+        self.headers = {
+            "Authorization": f"Bearer {token}",
+            "Duffel-Version": "v1",
+            "Content-Type": "application/json",
+        }
+        self.token = token
 
-a2 = {}
-for city_name, iata_code in airports.items():
-    if "/" in city_name and city_name is not None:
-        for part in city_name.split('/'):
-            a2[part.strip()] = iata_code
-airports.update(a2)
+    def get_airports(self):
+        airports, url = {}, "https://api.duffel.com/air/airports?limit=200"
+        while url:
+            data = requests.get(url, headers=self.headers).json()
+            airports.update({i['city_name']: i['iata_city_code'] for i in data['data']})
+            url = data['meta'].get('after') and f"{url}&after={data['meta']['after']}"
 
-with open("Airports.txt", "w") as file:
-    json.dump(airports, file, indent=4)
+        return {part.strip(): iata_code for city_name, iata_code in airports.items()
+                for part in (city_name.split('/') if city_name and '/' in city_name else [city_name])}
+
+    def local_save(self):
+        with open("Airports.txt", "w") as file:
+            json.dump(self.airports, file, indent=4)
+
+    def get_prices(self, slices):
+        url = "https://api.duffel.com/air/offer_requests"
+        passengers = [
+            {"type": "adult"},
+            {"type": "adult"},
+            {"age": 1}
+        ]
+
+        payload = {
+            "data":
+                {
+                    "slices": slices,
+                    "passengers": passengers,
+                    "cabin_class": "business",
+                 }
+        }
+
+        response = requests.post(url, headers=self.headers, json=payload)
+        if response.status_code == 201:
+            print("Offer request created successfully")
+            print(response.json())
+        else:
+            print(f"Failed to create offer request: {response.status_code}\n{response.text}")
+        print(response.json()['data']['offers'][0])
+        return response.json()['data']['offers'][0]['total_amount']
