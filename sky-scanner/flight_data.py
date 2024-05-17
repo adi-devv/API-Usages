@@ -20,3 +20,8 @@ class FlightData:
 
         return {part.strip(): iata_code for city_name, iata_code in airports.items()
                 for part in (city_name.split('/') if city_name and '/' in city_name else [city_name])}
+
+    def local_save(self):
+        with open("Airports.txt", "w") as file:
+            json.dump(self.airports, file, indent=4)
+
