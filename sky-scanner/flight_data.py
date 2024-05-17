@@ -10,3 +10,13 @@ class FlightData:
             "Content-Type": "application/json",
         }
         self.token = token
+
+    def get_airports(self):
+        airports, url = {}, "https://api.duffel.com/air/airports?limit=200"
+        while url:
+            data = requests.get(url, headers=self.headers).json()
+            airports.update({i['city_name']: i['iata_city_code'] for i in data['data']})
+            url = data['meta'].get('after') and f"{url}&after={data['meta']['after']}"
+
+        return {part.strip(): iata_code for city_name, iata_code in airports.items()
+                for part in (city_name.split('/') if city_name and '/' in city_name else [city_name])}
