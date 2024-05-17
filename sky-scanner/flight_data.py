@@ -25,3 +25,19 @@ class FlightData:
         with open("Airports.txt", "w") as file:
             json.dump(self.airports, file, indent=4)
 
+    def get_prices(self, slices):
+        url = "https://api.duffel.com/air/offer_requests"
+        passengers = [
+            {"type": "adult"},
+            {"type": "adult"},
+            {"age": 1}
+        ]
+
+        payload = {
+            "data":
+                {
+                    "slices": slices,
+                    "passengers": passengers,
+                    "cabin_class": "business",
+                 }
+        }
