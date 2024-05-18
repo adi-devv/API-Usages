@@ -6,8 +6,8 @@ from twilio.http.http_client import TwilioHttpClient
 
 f_url = "https://api.openweathermap.org/data/2.5/forecast"
 key = "get the key"
-acc_sid = "xx"
-auth_token = "x"
+acc_sid = " "
+auth_token = " "
 
 weather_params = {
     "lat": 25.572491,
