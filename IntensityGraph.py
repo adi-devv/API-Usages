@@ -2,8 +2,8 @@ import requests
 from datetime import datetime
 
 pix_ep = "https://pixe.la/v1/users"
-token = "svk24iunfwnad"
-usn = "aaddit"
+token = "x"
+usn = "x"
 gID = "graph1"
 user_params = {
     "token": token,
